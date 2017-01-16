@@ -21,15 +21,11 @@
 	var paddleHeight = 75;
 	var paddleWidth = 10;
 	var paddleX1 = 0;
-	var paddleX2 = canvas.width-paddleWidth;
 	var paddleY = (canvas.height-paddleHeight)/2;
 	var upPressed1 = false;
-	var upPressed2 = false;
-	var downPressed11 = false;
-	var downPressed12 = false;
+	var downPressed1 = false;
 	document.addEventListener("keydown",keyDownHandler1,false);
-	document.addEventListener("keyup",keyUpHandler1,false);document.addEventListener("keydown",keyDownHandler2,false);
-	document.addEventListener("keyup",keyUpHandler2,false);
+	document.addEventListener("keyup",keyUpHandler1,false);
 
 <!-- keyCode w 87 -->
 <!-- keyCode s 83 -->
@@ -44,14 +40,7 @@ function keyDownHandler1(e) {
 		downPressed1 = true;
 	}
 }
-function keyDownHandler2(e) {
-	if(e.keyCode == 83) {
-		upPressed2 = true;
-	}
-	else if(e.keyCode == 87) {
-		downPressed2 = true;
-	}
-}
+
 function keyUpHandler1(e) {
 	if(e.keyCode == 40) {
 		upPressed1 = false;
@@ -60,14 +49,7 @@ function keyUpHandler1(e) {
 		downPressed1 = false;
 	}
 }
-function keyUpHandler2(e) {
-	if(e.keyCode == 83) {
-		upPressed2 = false;
-	}
-	else if(e.keyCode == 87) {
-		downPressed2 = false;
-	}
-}
+
 function drawPaddle1(){
 	ctx.beginPath();
 	ctx.rect(paddleX1,paddleY,paddleWidth,paddleHeight);
@@ -75,45 +57,40 @@ function drawPaddle1(){
 	ctx.fill();
 	ctx.closePath();
 }
-function drawPaddle2(){
-	ctx.beginPath();
-	ctx.rect(paddleX2,paddleY,paddleWidth,paddleHeight);
-	ctx.fillStyle = "#0095DD";
-	ctx.fill();
-	ctx.closePath();
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
 }
-<!-- function drawBall() { -->
-    <!-- ctx.beginPath(); -->
-    <!-- ctx.arc(x, y, ballRadius, 0, Math.PI*2); -->
-    <!-- ctx.fillStyle = "#0095DD"; -->
-    <!-- ctx.fill(); -->
-    <!-- ctx.closePath(); -->
-<!-- } -->
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //drawBall();
+    drawBall();
 	drawPaddle1();
-	drawPaddle2();
-	<!-- if(x+dx<ballRadius||x+dx>canvas.width) -->
-	<!-- { -->
-		<!-- dx=-dx; -->
-	<!-- } -->
-	<!-- if(y+dy<ballRadius||y+dy>canvas.height) -->
-	<!-- { -->
-		<!-- dy=-dy; -->
-	<!-- } -->
+	if(x+dx>canvas.width - ballRadius)
+	{
+		dx=-dx;
+	} else if (x+dx<ballRadius) {
+	if (y > paddleY && y < paddleY + paddleHeight) {
+	dx = -dx;
+	} else {
+		alert("Game Over");
+		document.location.reload();
+	}
+	}
+	if(y+dy<ballRadius||y+dy>canvas.height - ballRadius)
+	{
+		dy=-dy;
+	}
 	if(upPressed1 && paddleY < canvas.height - paddleHeight) {
 		paddleY +=7;
 	}
 	else if(downPressed1 && paddleY > 0) {
 		paddleY -=7;
 	}
-	if(upPressed2) {
-		paddleY +=7;
-	}
-	else if(downPressed2) {
-		paddleY -=7;
-	}
+	
     x += dx;
     y += dy;
 }
