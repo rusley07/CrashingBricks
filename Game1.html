@@ -11,6 +11,7 @@
 <body>
 <canvas id="myCanvas" width="480" height="320"></canvas>
 <script>
+	var score = 0;
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
 	//canvas dimantions
@@ -115,10 +116,20 @@ function collisionDetection() {
 				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
 					dy = -dy;
 					b.status = 0;
+					score++;
+					if(score == brickRowCount*brickColumnCount) {
+						alert("You Win, \n CONGRATULATIONS!");
+						document.location.reload();
+					}
 				}
 			}
 		}
 	}
+}
+function drawScore() {
+	ctx.font = "16px Arial";
+	ctx.fillStyle = "#0095DD";
+	ctx.fillText("Score: " + score, 8, 20);
 }
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -126,6 +137,7 @@ function draw() {
 	drawPaddle1();
 	drawBricks();
 	collisionDetection();
+	drawScore();
 	if(x+dx>canvas.width - ballRadius)
 	{
 		dx=-dx;
@@ -145,8 +157,7 @@ function draw() {
 	}
 	if(upPressed1 && paddleY < canvas.height - paddleHeight) {
 		paddleY +=7;
-	}
-	else if(downPressed1 && paddleY > 0) {
+	} else if(downPressed1 && paddleY > 0) {
 		paddleY -=7;
 	}
 	
