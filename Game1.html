@@ -35,6 +35,11 @@
 	var brickColumnCount1 = 2;
 	var brickRowCount2 = 1;
 	var brickColumnCount2 = 1;
+	var brickRowCount3 = 2;
+	var brickColumnCount3 = 2;
+	var brickRowCount4 = 1;
+	var brickColumnCount4 = 1;
+	
 	var brickWidth = 20;
 	var brickHeight = 75;
 	var brickPadding = 5;
@@ -43,9 +48,12 @@
 	var brickOffSetTop2 = 210;
 	var brickOffSetLeft = 280;
 	var brickOffSetLeft3 = 305;
+	var brickOffSetLeft4 = 330;
 	var score = 0;
 	var score1 = 0;
 	var score2 = 0;
+	var score3 = 0;
+	var score4 = 0;
 var scoreArray = [];
 	
 	//making bricks disappear 
@@ -70,22 +78,33 @@ var scoreArray = [];
 			bricks2[c][r] = { x: 0, y: 0, status: 1 };
 		}
 	}
+	var bricks3 = [];
+	for (c=0; c<brickRowCount3;c++) {
+		bricks3[c] = [];
+		for (r=0;r<brickColumnCount3;r++) {
+			bricks3[c][r] = { x: 0, y: 0, status: 1 };
+		}
+	}
+	var bricks4 = [];
+	for (c=0; c<brickRowCount4; c++) {
+		bricks4[c] = [];
+		for (r=0;r<brickColumnCount4;r++) {
+			bricks4[c][r] = { x: 0, y: 0, status: 1 };
+		}
+	}
 	
 document.addEventListener("keydown",keyDownHandler1,false);
 document.addEventListener("keyup",keyUpHandler1,false);
-
 <!-- keyCode w 87 -->
 <!-- keyCode s 83 -->
 <!-- keyCode downarrow 40 -->
 <!-- keyCode uparrow 38 -->
-
 //draw the score
 function drawScore() {
 	ctx.font = "16px,Arial";
 	ctx.fillStyle = "#0095DD";
-	ctx.fillText("Score: "+(score+score1+score2),8,20);
+	ctx.fillText("Score: "+(score+score1+score2+score3+score4),8,20);
 }
-
 function keyDownHandler1(e) {
 	if(e.keyCode == 40) {
 		upPressed1 = true;
@@ -94,7 +113,6 @@ function keyDownHandler1(e) {
 		downPressed1 = true;
 	}
 }
-
 function keyUpHandler1(e) {
 	if(e.keyCode == 40) {
 		upPressed1 = false;
@@ -169,13 +187,30 @@ function drawBricks2() {
 	}
 }
 function drawBricks3() {
-	for (c=0;c<brickRowCount1;c++) {
-		for (r=0;r<brickColumnCount1;r++) {
-			if(bricks1[c][r].status == 1) {			
+	for (c=0;c<brickRowCount3;c++) {
+		for (r=0;r<brickColumnCount3;r++) {
+			if(bricks3[c][r].status == 1) {			
 				var brickX = (c*(brickWidth + brickPadding)) + brickOffSetLeft3;
 				var brickY = (c*(brickHeight + brickPadding)) + brickOffSetTop;
-				bricks1[c][r].x = brickX;
-				bricks1[c][r].y = brickY;
+				bricks3[c][r].x = brickX;
+				bricks3[c][r].y = brickY;
+				ctx.beginPath();
+				ctx.rect(brickX,brickY,brickWidth,brickHeight);
+				ctx.fillStyle = "#0095DD";
+				ctx.fill();
+				ctx.closePath();
+			}
+		}
+	}
+}
+function drawBricks4() {
+	for (c=0;c<brickRowCount4;c++) {
+		for (r=0;r<brickColumnCount4;r++) {
+			if(bricks4[c][r].status == 1) {			
+				var brickX = (c*(brickWidth + brickPadding)) + brickOffSetLeft4;
+				var brickY = (c*(brickHeight + brickPadding)) + brickOffSetTop;
+				bricks4[c][r].x = brickX;
+				bricks4[c][r].y = brickY;
 				ctx.beginPath();
 				ctx.rect(brickX,brickY,brickWidth,brickHeight);
 				ctx.fillStyle = "#0095DD";
@@ -201,8 +236,8 @@ function collisionDetection() {
 			}
 		}
 	}
-	for(c=0;c<brickRowCount1;c++) {
-		for(r=0;r<brickColumnCount1;r++) {
+	for(c=0;c<brickColumnCount1;c++) {
+		for(r=0;r<brickRowCount1;r++) {
 		var b = bricks1[c][r];
 		//calculatins
 		//assign status 1 to visible bricks
@@ -222,7 +257,6 @@ function collisionDetection() {
 			//calculatins
 			//assign status 1 to visible bricks
 			if(b.status == 1) {
-			
 				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
 					dy = -dy;
 					b.status = 0;
@@ -232,13 +266,42 @@ function collisionDetection() {
 			}
 		}
 	}
+	for(c=0;c<brickColumnCount3;c++) {
+		for(r=0;r<brickRowCount3;r++) {
+			var b = bricks3[c][r];
+			//calculatins
+			//assign status 1 to visible bricks
+			if(b.status == 1) {
+				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
+					dy = -dy;
+					b.status = 0;
+					score3++;
+					scoreArray.push(score3);
+				}
+			}
+		}
+	}
+	for(c=0;c<brickColumnCount4;c++) {
+		for(r=0;r<brickRowCount4;r++) {
+			var b = bricks4[c][r];
+			//calculatins
+			//assign status 1 to visible bricks
+			if(b.status == 1) {
+				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
+					dy = -dy;
+					b.status = 0;
+					score4++;
+					scoreArray.push(score4);
+				}
+			}
+		}
+	}
 	drawScore();
-	if(scoreArray.length == (brickColumnCount*brickRowCount+brickColumnCount1*brickRowCount1+brickColumnCount2*brickRowCount2)) {
+	if(scoreArray.length == (brickColumnCount*brickRowCount+brickColumnCount1*brickRowCount1+brickColumnCount2*brickRowCount2+brickColumnCount3*brickRowCount3+brickColumnCount4*brickRowCount4)) {
 		alert("You WIN!!! Congratulations! Your Score is: " + scoreArray.length);
 		document.location.reload();
 	}
 }
-
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
@@ -246,7 +309,8 @@ function draw() {
 	drawBricks();
 	drawBricks1();
 	drawBricks2();
-	//drawBricks3();
+	drawBricks3();
+	drawBricks4();
 	collisionDetection();
 	
 	if(x+dx>canvas.width - ballRadius)						//bounce off the right wall
@@ -258,7 +322,7 @@ function draw() {
 				dx = -dx;
 			}
 		} else {
-			alert("Game Over");
+			alert("Game Over"+scoreArray.length);
 			document.location.reload();
 		}
 	}
