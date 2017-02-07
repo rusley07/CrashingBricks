@@ -44,6 +44,9 @@
 	var brickOffSetLeft = 280;
 	var brickOffSetLeft3 = 305;
 	var score = 0;
+	var score1 = 0;
+	var score2 = 0;
+var scoreArray = [];
 	
 	//making bricks disappear 
 	var bricks = [];
@@ -80,7 +83,7 @@ document.addEventListener("keyup",keyUpHandler1,false);
 function drawScore() {
 	ctx.font = "16px,Arial";
 	ctx.fillStyle = "#0095DD";
-	ctx.fillText("Score: "+score,8,20);
+	ctx.fillText("Score: "+(score+score1+score2),8,20);
 }
 
 function keyDownHandler1(e) {
@@ -189,95 +192,53 @@ function collisionDetection() {
 			//calculatins
 			//assign status 1 to visible bricks
 			if(b.status == 1) {
-				<!-- x position of the ball is greater than the x position of the brick -->
-				<!-- x position of the ball is less than the x position of the brick plus its width -->
-				<!-- y positoin of the ball is greater than the y position of the brick -->
-				<!-- y position of the ball is less than the y position of the brick plus its height -->
 				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
 					dy = -dy;
 					b.status = 0;
 					score++;
-					if(score == brickColumnCount*brickRowCount) {
-						alert("You WIN!!! Congratulations!");
-						document.location.reload();
-					}
+					scoreArray.push(score);
 				}
 			}
 		}
 	}
-}
-function collisionDetection1() {
-	for(c=0;c<brickColumnCount1;c++) {
-		for(r=0;r<brickRowCount1;r++) {
-			var b = bricks1[c][r];
-			//calculatins
-			//assign status 1 to visible bricks
-			if(b.status == 1) {
-				<!-- x position of the ball is greater than the x position of the brick -->
-				<!-- x position of the ball is less than the x position of the brick plus its width -->
-				<!-- y positoin of the ball is greater than the y position of the brick -->
-				<!-- y position of the ball is less than the y position of the brick plus its height -->
-				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
+	for(c=0;c<brickRowCount1;c++) {
+		for(r=0;r<brickColumnCount1;r++) {
+		var b = bricks1[c][r];
+		//calculatins
+		//assign status 1 to visible bricks
+		if(b.status == 1) {
+			if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
 					dy = -dy;
 					b.status = 0;
-					score++;
-					if(score == brickColumnCount1*brickRowCount1) {
-						alert("You WIN!!! Congratulations!");
-						document.location.reload();
-					}
+					score1++;
+					scoreArray.push(score1);
 				}
 			}
 		}
 	}
-}
-function collisionDetection2() {
 	for(c=0;c<brickColumnCount2;c++) {
 		for(r=0;r<brickRowCount2;r++) {
 			var b = bricks2[c][r];
 			//calculatins
 			//assign status 1 to visible bricks
 			if(b.status == 1) {
-				<!-- x position of the ball is greater than the x position of the brick -->
-				<!-- x position of the ball is less than the x position of the brick plus its width -->
-				<!-- y positoin of the ball is greater than the y position of the brick -->
-				<!-- y position of the ball is less than the y position of the brick plus its height -->
+			
 				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
 					dy = -dy;
 					b.status = 0;
-					score++;
-					if(score == brickColumnCount2*brickRowCount2) {
-						alert("You WIN!!! Congratulations!");
-						document.location.reload();
-					}
+					score2++;
+					scoreArray.push(score2);
 				}
 			}
 		}
 	}
-}
-function collisionDetection3() {
-	for(c=0;c<brickColumnCount1;c++) {
-		for(r=0;r<brickRowCount1;r++) {
-			var b = bricks1[c][r];
-			//calculatins
-			//assign status 1 to visible bricks
-			if(b.status == 1) {
-				<!-- x position of the ball is greater than the x position of the brick -->
-				<!-- x position of the ball is less than the x position of the brick plus its width -->
-				<!-- y positoin of the ball is greater than the y position of the brick -->
-				<!-- y position of the ball is less than the y position of the brick plus its height -->
-				if(x>b.x && x<b.x+brickWidth && y>b.y && y<b.y+brickHeight) {
-					dy = -dy;
-					b.status = 0;
-					score++;
-					if(score == brickColumnCount1*brickRowCount1) {
-						alert("You WIN!!! Congratulations!");
-						document.location.reload();
-					}
-				}
-			}
-		}
+	drawScore();
+	if(scoreArray.length == (brickColumnCount*brickRowCount+brickColumnCount1*brickRowCount1+brickColumnCount2*brickRowCount2)) {
+		alert("You WIN!!! Congratulations! Your Score is: " + scoreArray.length);
+		document.location.reload();
 	}
 }
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
@@ -285,12 +246,9 @@ function draw() {
 	drawBricks();
 	drawBricks1();
 	drawBricks2();
-	drawBricks3();
+	//drawBricks3();
 	collisionDetection();
-	collisionDetection1();
-	collisionDetection2();
-	collisionDetection3();
-	drawScore();
+	
 	if(x+dx>canvas.width - ballRadius)						//bounce off the right wall
 	{
 		dx=-dx;
