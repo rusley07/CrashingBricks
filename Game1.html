@@ -13,23 +13,18 @@
 <script>
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
-	//canvas dimantions
-	var x = 10;
+	var x = 10;														//canvas dimantions
 	var y = canvas.height/2;
-	//ball movement
-	var dx = 2;
+	var dx = 2;														//ball movement
 	var dy = -2;
 	var ballRadius = 10;
-	//paddle dimations
-	var paddleHeight = 75;
+	var paddleHeight = 75;											//paddle dimations
 	var paddleWidth = 10;
-	//paddle coordinates
-	var paddleX1 = 0;
+	var paddleX1 = 0;												//paddle coordinates
 	var paddleY = (canvas.height-paddleHeight)/2;
 	var upPressed1 = false;
 	var downPressed1 = false;
-	//brick dimations and coordinates
-	var brickRowCount = 3;
+	var brickRowCount = 3;											//numbers of bricks
 	var brickColumnCount = 3;
 	var brickRowCount1 = 2;
 	var brickColumnCount1 = 2;
@@ -40,7 +35,7 @@
 	var brickRowCount4 = 1;
 	var brickColumnCount4 = 1;
 	
-	var brickWidth = 20;
+	var brickWidth = 20;											//brick dimations
 	var brickHeight = 75;
 	var brickPadding = 5;
 	var brickOffSetTop = 30;
@@ -95,16 +90,12 @@ var scoreArray = [];
 	
 document.addEventListener("keydown",keyDownHandler1,false);
 document.addEventListener("keyup",keyUpHandler1,false);
+document.addEventListener("mousemove",mouseMoveHandler,false);
 <!-- keyCode w 87 -->
 <!-- keyCode s 83 -->
 <!-- keyCode downarrow 40 -->
 <!-- keyCode uparrow 38 -->
-//draw the score
-function drawScore() {
-	ctx.font = "16px,Arial";
-	ctx.fillStyle = "#0095DD";
-	ctx.fillText("Score: "+(score+score1+score2+score3+score4),8,20);
-}
+
 function keyDownHandler1(e) {
 	if(e.keyCode == 40) {
 		upPressed1 = true;
@@ -120,6 +111,17 @@ function keyUpHandler1(e) {
 	else if(e.keyCode == 38) {
 		downPressed1 = false;
 	}
+}
+function mouseMoveHandler(e) {
+	var relativeY = e.clientY - canvas.offsetTop;
+	if(relativeY > 0 && relativeY < canvas.height) {
+		paddleY = relativeY - paddleHeight/4;
+	}
+}
+function drawScore() {										//draw the score
+	ctx.font = "16px,Arial";
+	ctx.fillStyle = "#0095DD";
+	ctx.fillText("Score: "+(score+score1+score2+score3+score4),8,20);
 }
 function drawBall() {
     ctx.beginPath();
@@ -145,7 +147,7 @@ function drawBricks() {
 				bricks[c][r].y = brickY;
 				ctx.beginPath();
 				ctx.rect(brickX,brickY,brickWidth,brickHeight);
-				ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = "#DF0000";
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -162,7 +164,7 @@ function drawBricks1() {
 				bricks1[c][r].y = brickY;
 				ctx.beginPath();
 				ctx.rect(brickX,brickY,brickWidth,brickHeight);
-				ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = "#DFDF00";
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -196,7 +198,7 @@ function drawBricks3() {
 				bricks3[c][r].y = brickY;
 				ctx.beginPath();
 				ctx.rect(brickX,brickY,brickWidth,brickHeight);
-				ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = "#DF0034";
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -213,7 +215,7 @@ function drawBricks4() {
 				bricks4[c][r].y = brickY;
 				ctx.beginPath();
 				ctx.rect(brickX,brickY,brickWidth,brickHeight);
-				ctx.fillStyle = "#0095DD";
+				ctx.fillStyle = "#DF00AB";
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -315,14 +317,14 @@ function draw() {
 	
 	if(x+dx>canvas.width - ballRadius)						//bounce off the right wall
 	{
-		dx=-dx;
+		dx=-(1.5*dx);
 	} else if (x+dx<ballRadius) { 							//ball goes beyond the Paddle
 		if (y > paddleY && y < paddleY + paddleHeight) { 	//Paddle stays in the view
 			if(y=y-paddleWidth) {							//bounce off the paddle
 				dx = -dx;
 			}
 		} else {
-			alert("Game Over"+scoreArray.length);
+			alert("Game Over");
 			document.location.reload();
 		}
 	}
@@ -330,7 +332,7 @@ function draw() {
 	{
 		dy=-dy;
 	}
-	if(upPressed1 && paddleY < canvas.height - paddleHeight) {
+	if(upPressed1 && paddleY < canvas.height - paddleHeight) {//moving the paddle up and down within the canvas height
 		paddleY +=7;
 	}
 	else if(downPressed1 && paddleY > 0) {
