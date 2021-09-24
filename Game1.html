@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Gamedev Canvas Workshop</title>
+	<style>
+		* { padding: 0; margin: 0; }
+		canvas { background: #eee; display: block; margin: 0 auto; }
+	</style>
+</head>
+<body>
+<canvas id="myCanvas" width="880" height="520"></canvas>
+<script>
+	//get the reference to the canvas
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	var x = 10;
+	var y = canvas.height/2;
+	var dx = 2;
+	var dy = -2;
+	var ballRadius = 10;
+	var paddleHeight = 75;
+	var paddleWidth = 10;
+	var paddleX1 = 0;
+	var paddleX2 = canvas.width-paddleWidth;
+	var paddleY = (canvas.height-paddleHeight)/2;
+	//defining controls
+	var upPressed1 = false;
+	var upPressed2 = false;
+	var downPressed11 = false;
+	var downPressed12 = false;
+	//listen to the controls actions
+	document.addEventListener("keydown",keyDownHandler1,false);
+	document.addEventListener("keydown",keyDownHandler2,false);
+	document.addEventListener("keyup",keyUpHandler1,false);
+	document.addEventListener("keyup",keyUpHandler2,false);
+
+//operate paddle move down, right side keyboard, when the key is pressed
+function keyDownHandler1(e) {
+	if(e.keyCode == 40) {
+		upPressed1 = true;
+	}
+	else if(e.keyCode == 38) {
+		downPressed1 = true;
+	}
+}
+
+//operate paddle move down, left side, when the key is pressed
+function keyDownHandler2(e) {
+	if(e.keyCode == 87) {
+		upPressed2 = true;
+	}
+	else if(e.keyCode == 83) {
+		downPressed2 = true;
+	}
+}
+
+//operate paddle move up, right side, when the key is stop being pressed
+function keyUpHandler1(e) {
+	if(e.keyCode == 40) {
+		upPressed1 = false;
+	}
+	else if(e.keyCode == 38) {
+		downPressed1 = false;
+	}
+}
+
+//operate paddle move up, left side, when the key is stop being pressed
+function keyUpHandler2(e) {
+	if(e.keyCode == 87) {
+		upPressed2 = false;
+	}
+	else if(e.keyCode == 83) {
+		downPressed2 = false;
+	}
+}
+
+//draw the paddle
+function drawPaddle1(){
+	ctx.beginPath();
+	ctx.rect(paddleX1,paddleY,paddleWidth,paddleHeight);
+	ctx.fillStyle = "#A83232";//red
+	ctx.fill();
+	ctx.closePath();
+}
+
+//draw the second paddle
+function drawPaddle2(){
+	ctx.beginPath();
+	ctx.rect(paddleX2,paddleY,paddleWidth,paddleHeight);
+	ctx.fillStyle = "#0095DD";
+	ctx.fill();
+	ctx.closePath();
+}
+
+//draw the ball
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+
+//draw on the canvas
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBall();
+	drawPaddle1();
+	drawPaddle2();
+	if(x+dx<ballRadius||x+dx>canvas.width)
+	{
+		dx=-dx;
+	}
+	if(y+dy<ballRadius||y+dy>canvas.height)
+	{
+		dy=-dy;
+	}
+	if(upPressed1) {
+		paddleY +=7;
+		if(paddleY + paddleHeight > canvas.height){
+			paddleY - canvas.height - paddleHeight;
+			}
+	}
+	else if(downPressed1) {
+		paddleY -=7;
+		if(paddleY < 0 ){
+			paddleY = 0;
+			}
+	}
+	if(upPressed2) {
+		paddleY +=7;
+	}
+	else if(downPressed2) {
+		paddleY -=7;
+	}
+    x += dx;
+    y += dy;
+}
+setInterval(draw, 10);
+</script>
+</body>
+</html>
